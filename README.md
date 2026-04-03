@@ -104,9 +104,49 @@ Deleted /user/mahasiswa/kelompok1/input/backup.txt
 bash-4.2$ hdfs dfs -stat "%r" /user/mahasiswa/kelompok1/input/sample.txt
 1
 ```
+
+
 <img width="948" height="114" alt="image" src="https://github.com/user-attachments/assets/3941b613-36fc-4669-96ed-d1c3beb88b62" />
 
 - 📝 Jawaban Pertanyaan Task 1.5:
 Mengapa replication factor di cluster kita adalah 1, bukan 3 seperti default? Apa implikasinya terhadap fault tolerance?
 Jawab: Replication factor adalah 1 karena pada saat inisialisasi cluster, kita telah mendefinisikan variabel HDFS-SITE.XML_dfs.replication=1 di dalam file hadoop.env. Selain itu, melalui arsitektur Docker Compose, kita memang hanya menjalankan 1 container DataNode.
 Implikasinya terhadap fault tolerance (toleransi kesalahan) adalah sistem tidak memiliki perlindungan sama sekali (0 fault tolerance). Jika satu-satunya DataNode tersebut rusak, mati, atau datanya corrupt, maka data akan hilang permanen karena HDFS tidak memiliki salinan (replika) data di node lain untuk memulihkannya.
+
+## Laporan Praktikum - Lab 2: Explore Hadoop Web UI
+### Task 2.1: NameNode Web UI
+Akses Web: ``http://localhost:9870``                         
+Hasil Eksplorasi Overview & Datanodes:
+1. Overview:
+- Versi Hadoop: Hadoop 3.3.6
+- Jumlah DataNode Aktif (Live Nodes): 1
+- Total Kapasitas HDFS:	1006.85 GB
+- Kapasitas Terpakai (DFS Used): 44 KB (0%)
+<img width="1919" height="904" alt="image" src="https://github.com/user-attachments/assets/137e61f5-8f00-4007-9de2-1b49956ca86d" />
+
+2. Datanodes:
+- Status DataNode: In Service / Normal
+- Kapasitas masing-masing DataNode: 1006.85 GB
+<img width="1836" height="447" alt="image" src="https://github.com/user-attachments/assets/62274bd3-b9e0-4d0f-8e38-a7f9c957d9e6" />
+
+3. Utilities → Browse the file system: (Navigasi ke /user/mahasiswa/kelompok1/input/sample.txt)
+- Block ID: 1073741825
+- Replication: 1
+<img width="1919" height="917" alt="image" src="https://github.com/user-attachments/assets/47ea425a-0964-491f-b645-9ef82b3e09aa" />
+<img width="956" height="792" alt="image" src="https://github.com/user-attachments/assets/e55207b5-c9c9-41f4-b220-b4d3813c0320" />
+
+### Task 2.2: YARN ResourceManager Web UI
+Akses Web: ``http://localhost:8088``                                                  
+Hasil Eksplorasi ResourceManager:
+1. Cluster Metrics:
+- Jumlah NodeManager Aktif (Active Nodes): 1
+- Total Memory: 2 GB atau 2048 MB
+- Total vCores: 8
+<img width="1542" height="119" alt="image" src="https://github.com/user-attachments/assets/9d6bab2a-aea1-467a-82c2-95854db21718" />
+<img width="1919" height="924" alt="image" src="https://github.com/user-attachments/assets/b8d5e092-e5cd-4490-b355-660e77adff30" />
+
+2. Scheduler (Tab Scheduler):
+- Jenis Scheduler: Capacity Scheduler (Ini adalah tipe scheduler default pada Hadoop 3 YARN)
+- Jumlah Queue: 1 Queue utama (yaitu queue default)
+<img width="1919" height="925" alt="image" src="https://github.com/user-attachments/assets/0039f33a-8695-4954-a243-f665eb7222b8" />
+
